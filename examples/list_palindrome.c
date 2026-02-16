@@ -9,7 +9,7 @@ int main(void) {
 
     assert(List_getLength(l) == 0);
 
-    const char *word = "aabcdbaa";
+    char *word = "aabcdbaa";
 
     for (size_t i = 0; i < 8; i++) {
         List_appendItem(l, (char *)(word + i));
