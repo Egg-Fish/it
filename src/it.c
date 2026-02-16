@@ -84,5 +84,9 @@ void List_removeItem(List l, size_t index) {
         l->head = nextNode;
     }
 
+    if (nextNode == NULL) {
+        l->tail = prevNode;
+    }
+
     l->length--;
 }
