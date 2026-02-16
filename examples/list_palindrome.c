@@ -9,13 +9,17 @@ int main(void) {
 
     assert(List_getLength(l) == 0);
 
-    const char *word = "aabbaa";
+    const char *word = "aabcdbaa";
 
-    for (size_t i = 0; i < 6; i++) {
+    for (size_t i = 0; i < 8; i++) {
         List_appendItem(l, (char *)(word + i));
     }
 
-    assert(List_getLength(l) == 6);
+    assert(List_getLength(l) == 8);
+
+    List_removeItem(l, 4);
+
+    assert(List_getLength(l) == 7);
 
     bool isPalindrome = true;
     size_t length = List_getLength(l);
@@ -27,14 +31,15 @@ int main(void) {
 
         bool isEqual = *left == *right;
 
-        printf("l[%zu] == l[%zu]? %s\n", i, j, isEqual ? "YES" : "NO");
+        printf("%c = l[%zu] == l[%zu] = %c? %s\n", *left, i, j, *right,
+               isEqual ? "YES" : "NO");
 
         if (!isEqual) {
             isPalindrome = false;
         }
     }
 
-    printf("is %s a palindrome? %s", word, isPalindrome ? "YES" : "NO");
+    printf("palindrome? %s", isPalindrome ? "YES" : "NO");
 
     List_destroy(l);
     return 0;
