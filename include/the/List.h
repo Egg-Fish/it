@@ -1,0 +1,16 @@
+#pragma once
+
+#include <stdbool.h>
+#include <stddef.h>
+
+typedef struct List *List;
+
+List List_create(void);
+void List_destroy(List l);
+
+size_t List_getLength(List l);
+
+void List_appendItem(List l, void *item);
+
+void *List_getItem(List l, size_t index);
+void List_removeItem(List l, size_t index);
