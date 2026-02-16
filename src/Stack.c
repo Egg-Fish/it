@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 Stack Stack_create(void) { return List_create(); }
-void Stack_destroy(Stack s) { return List_destroy(s); }
+void Stack_destroy(Stack s) { List_destroy(s); }
 
 size_t Stack_getLength(Stack s) { return List_getLength(s); }
 
