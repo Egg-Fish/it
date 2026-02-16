@@ -25,7 +25,17 @@ List List_create(void) {
     return l;
 }
 
-void List_destroy(List l) { free(l); }
+void List_destroy(List l) {
+    ListNode node = l->head;
+
+    while (node != NULL) {
+        ListNode nextNode = node->next;
+        free(node);
+        node = nextNode;
+    }
+
+    free(l);
+}
 
 size_t List_getLength(List l) { return l->length; }
 
