@@ -6,8 +6,39 @@
 
 typedef struct ListNode {
     void *value;
+    struct ListNode *prev;
     struct ListNode *next;
 } *ListNode;
+
+ListNode ListNode_create(void *value, ListNode prev, ListNode next) {
+    ListNode node = malloc(sizeof(struct ListNode));
+
+    node->value = value;
+    node->prev = prev;
+    node->next = next;
+
+    return node;
+}
+
+void ListNode_destroy(ListNode node) { free(node); }
+
+void ListNode_link(ListNode prev, ListNode next) {
+    if (prev != NULL) {
+        prev->next = next;
+    }
+
+    if (next != NULL) {
+        next->prev = prev;
+    }
+}
+
+void ListNode_insert(ListNode prev, ListNode node, ListNode next) {
+    ListNode_link(prev, node);
+    ListNode_link(node, next);
+}
+
+ListNode ListNode_getPrev(ListNode node) { return node->prev; }
+ListNode ListNode_getNext(ListNode node) { return node->next; }
 
 struct List {
     size_t length;
@@ -29,7 +60,7 @@ void List_destroy(List l) {
     ListNode node = l->head;
 
     while (node != NULL) {
-        ListNode nextNode = node->next;
+        ListNode nextNode = ListNode_getNext(node);
         free(node);
         node = nextNode;
     }
@@ -40,16 +71,15 @@ void List_destroy(List l) {
 size_t List_getLength(List l) { return l->length; }
 
 void List_appendItem(List l, void *item) {
-    ListNode node = malloc(sizeof(struct ListNode));
-    node->value = item;
-    node->next = NULL;
+    size_t length = List_getLength(l);
 
-    if (l->head == NULL) {
-        l->tail = node;
+    ListNode node = ListNode_create(item, NULL, NULL);
+
+    ListNode_insert(l->tail, node, NULL);
+    l->tail = node;
+
+    if (length == 0) {
         l->head = node;
-    } else {
-        l->tail->next = node;
-        l->tail = node;
     }
 
     l->length++;
@@ -59,7 +89,7 @@ void *List_getItem(List l, size_t index) {
     ListNode node = l->head;
 
     while (index > 0) {
-        node = node->next;
+        node = ListNode_getNext(node);
         index--;
     }
 
@@ -67,24 +97,27 @@ void *List_getItem(List l, size_t index) {
 }
 
 void List_removeItem(List l, size_t index) {
-    ListNode prevNode = NULL;
+    size_t length = List_getLength(l);
+
     ListNode node = l->head;
 
-    while (index > 0) {
-        prevNode = node;
-        node = node->next;
-        index--;
+    size_t i = index;
+    while (i > 0) {
+        node = ListNode_getNext(node);
+        i--;
     }
 
-    ListNode nextNode = node->next;
+    ListNode prevNode = ListNode_getPrev(node);
+    ListNode nextNode = ListNode_getNext(node);
 
-    if (prevNode) {
-        prevNode->next = nextNode;
-    } else {
+    ListNode_link(prevNode, nextNode);
+    ListNode_destroy(node);
+
+    if (index == 0) {
         l->head = nextNode;
     }
 
-    if (nextNode == NULL) {
+    if (index == length - 1) {
         l->tail = prevNode;
     }
 
