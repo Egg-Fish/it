@@ -65,3 +65,24 @@ void *List_getItem(List l, size_t index) {
 
     return node->value;
 }
+
+void List_removeItem(List l, size_t index) {
+    ListNode prevNode = NULL;
+    ListNode node = l->head;
+
+    while (index > 0) {
+        prevNode = node;
+        node = node->next;
+        index--;
+    }
+
+    ListNode nextNode = node->next;
+
+    if (prevNode) {
+        prevNode->next = nextNode;
+    } else {
+        l->head = nextNode;
+    }
+
+    l->length--;
+}
