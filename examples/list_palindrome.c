@@ -6,7 +6,7 @@
 
 int main(void) {
     List l = List_create();
-    
+
     assert(List_getLength(l) == 0);
 
     const char *word = "aabbaa";
@@ -14,7 +14,7 @@ int main(void) {
     for (size_t i = 0; i < 6; i++) {
         List_appendItem(l, (char *)(word + i));
     }
-    
+
     assert(List_getLength(l) == 6);
 
     bool isPalindrome = true;
