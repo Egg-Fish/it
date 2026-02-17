@@ -22,13 +22,24 @@ ListNode ListNode_create(void *value, ListNode prev, ListNode next) {
 
 void ListNode_destroy(ListNode node) { free(node); }
 
+void *ListNode_getValue(ListNode node) { return node->value; }
+void ListNode_setValue(ListNode node, void *value) { node->value = value; }
+
+ListNode ListNode_getPrev(ListNode node) { return node->prev; }
+void ListNode_setPrev(ListNode node, ListNode prev) { node->prev = prev; }
+
+ListNode ListNode_getNext(ListNode node) { return node->next; }
+void ListNode_setNext(ListNode node, ListNode next) { node->next = next; }
+
 void ListNode_link(ListNode prev, ListNode next) {
     if (prev != NULL) {
-        prev->next = next;
+        ListNode_setNext(prev, next);
+        // prev->next = next;
     }
 
     if (next != NULL) {
-        next->prev = prev;
+        ListNode_setPrev(next, prev);
+        // next->prev = prev;
     }
 }
 
@@ -36,9 +47,6 @@ void ListNode_insert(ListNode prev, ListNode node, ListNode next) {
     ListNode_link(prev, node);
     ListNode_link(node, next);
 }
-
-ListNode ListNode_getPrev(ListNode node) { return node->prev; }
-ListNode ListNode_getNext(ListNode node) { return node->next; }
 
 struct List {
     size_t length;
@@ -69,29 +77,25 @@ void List_destroy(List l) {
 }
 
 size_t List_getLength(List l) { return l->length; }
+void List_setLength(List l, size_t length) { l->length = length; }
+void List_incrementLength(List l) { l->length++; }
+void List_decrementLength(List l) { l->length--; }
 
-void List_appendItem(List l, void *item) {
-    ListNode node = ListNode_create(item, NULL, NULL);
+ListNode List_getHead(List l) { return l->head; }
+void List_setHead(List l, ListNode head) { l->head = head; }
 
-    ListNode_insert(l->tail, node, NULL);
-    l->tail = node;
-
-    if (List_isEmpty(l)) {
-        l->head = node;
-    }
-
-    l->length++;
-}
+ListNode List_getTail(List l) { return l->tail; }
+void List_setTail(List l, ListNode tail) { l->tail = tail; }
 
 void *List_getItem(List l, size_t index) {
-    ListNode node = l->head;
+    ListNode node = List_getHead(l);
 
     while (index > 0) {
         node = ListNode_getNext(node);
         index--;
     }
 
-    return node->value;
+    return ListNode_getValue(node);
 }
 
 void List_removeItem(List l, size_t index) {
@@ -112,14 +116,27 @@ void List_removeItem(List l, size_t index) {
     ListNode_destroy(node);
 
     if (index == 0) {
-        l->head = nextNode;
+        List_setHead(l, nextNode);
     }
 
     if (index == length - 1) {
-        l->tail = prevNode;
+        List_setTail(l, prevNode);
     }
 
-    l->length--;
+    List_decrementLength(l);
+}
+
+void List_appendItem(List l, void *item) {
+    ListNode node = ListNode_create(item, NULL, NULL);
+
+    ListNode_insert(List_getTail(l), node, NULL);
+    List_setTail(l, node);
+
+    if (List_isEmpty(l)) {
+        List_setHead(l, node);
+    }
+
+    List_incrementLength(l);
 }
 
 bool List_isEmpty(List l) { return List_getLength(l) == 0; }
