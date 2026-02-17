@@ -71,14 +71,12 @@ void List_destroy(List l) {
 size_t List_getLength(List l) { return l->length; }
 
 void List_appendItem(List l, void *item) {
-    size_t length = List_getLength(l);
-
     ListNode node = ListNode_create(item, NULL, NULL);
 
     ListNode_insert(l->tail, node, NULL);
     l->tail = node;
 
-    if (length == 0) {
+    if (List_isEmpty(l)) {
         l->head = node;
     }
 
@@ -123,3 +121,5 @@ void List_removeItem(List l, size_t index) {
 
     l->length--;
 }
+
+bool List_isEmpty(List l) { return List_getLength(l) == 0; }

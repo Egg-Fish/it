@@ -14,3 +14,5 @@ void List_appendItem(List l, void *item);
 
 void *List_getItem(List l, size_t index);
 void List_removeItem(List l, size_t index);
+
+bool List_isEmpty(List l);
