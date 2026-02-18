@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "the/Array.h"
 #include "the/List.h"
 #include "the/ListNode.h"
 #include "the/Stack.h"
