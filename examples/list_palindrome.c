@@ -3,23 +3,25 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 int main(void) {
     List l = List_create();
 
     assert(List_getLength(l) == 0);
 
-    char *word = "aabcdbaa";
+    char *word =
+        "loremipsumdolorsitametconsecteturadipiscingelitintegerjustometussodalesvitaeve"
+        "litaefficiturfinibusmolestieitselomsubinifruticiffeatileveativseladossutemotsu"
+        "jregetnitilegnicsipidarutetcesnoctematisrolodmuspimerol";
 
-    for (size_t i = 0; i < 8; i++) {
+    size_t wordLength = strlen(word);
+
+    for (size_t i = 0; i < wordLength; i++) {
         List_appendItem(l, (char *)(word + i));
     }
 
-    assert(List_getLength(l) == 8);
-
-    List_removeItem(l, 4);
-
-    assert(List_getLength(l) == 7);
+    assert(List_getLength(l) == wordLength);
 
     bool isPalindrome = true;
     size_t length = List_getLength(l);
